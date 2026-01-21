@@ -15,9 +15,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const addToCart = (id) => {
-    const isItemInCart = cartItems.find((item) => item.id === id);
-
-    if (!isItemInCart) {
+    if (isAlreadyInCart(id)) {
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === id ? { id: item.id, quantity: item.quantity + 1 } : item,
+        ),
+      );
+    } else {
       setCartItems([...cartItems, { id, quantity: 1 }]);
     }
   };

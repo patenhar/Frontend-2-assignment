@@ -2,21 +2,16 @@ import type { UUID } from "crypto";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { CartContext } from "../Contexts/CartProvider";
+import { useFetch } from "../Hooks/useFetch";
 
 interface ProductCardProps {
   id: UUID;
   title: string;
   description: string;
   price: number;
-  quantity: number;
 }
 
-export default function ProductCard({
-  id,
-  title,
-  description,
-  price,
-}: ProductCardProps) {
+export default function CartProductCard({ id }: ProductCardProps) {
   const {
     cartItems,
     isAlreadyInCart,
@@ -26,12 +21,17 @@ export default function ProductCard({
     getTotalItems,
     getTotalPrice,
   } = useContext(CartContext);
+  console.log(id);
+
+  const { data, loading, error } = useFetch(
+    `https://dummyjson.com/products/${id}`,
+  );
 
   return (
     <div className="bg-gray-100 w-70 flex flex-col items-center border-0 rounded-sm">
       <div className="border-0 rounded-sm relative">
         <div className="absolute top-5 right-5 flex flex-col gap-2">
-          {price > 500 && (
+          {data?.price > 500 && (
             <div className="p-1 px-2 text-center border-0 rounded-2xl bg-yellow-500 text-white">
               Premium
             </div>
@@ -39,27 +39,27 @@ export default function ProductCard({
         </div>
       </div>
       <div className="flex flex-col items-start w-full p-5">
-        <h1 className="font-bold">{title}</h1>
-        <p>{description}</p>
-        <h5>$ {price}</h5>
+        <h1 className="font-bold">{data?.title}</h1>
+        <p>{data?.description}</p>
+        <h5>$ {data?.price}</h5>
 
         <div className="flex w-full gap-2">
-          {/* {isAlreadyInCart(id) ? (
-            <button
-              onClick={(e) => removeFromCart(e.currentTarget.id)}
-              id={id}
-              className="bg-red-500 text-white border-0 rounded-sm p-2 w-full cursor-pointer"
-            >
-              Remove
-            </button>
-          ) : ( */}
+          {/* {isAlreadyInCart(id) ? ( */}
+          <button
+            onClick={(e) => removeFromCart(e.currentTarget.id)}
+            id={id}
+            className="bg-red-500 text-white border-0 rounded-sm p-2 w-full cursor-pointer"
+          >
+            Remove
+          </button>
+          {/* ) : (
           <button
             onClick={(e) => addToCart(e.currentTarget.id)}
             id={id}
             className="bg-blue-500 text-white border-0 rounded-sm p-2 w-full cursor-pointer"
           >
             Add to cart
-          </button>
+          </button> */}
           {/* )} */}
         </div>
       </div>

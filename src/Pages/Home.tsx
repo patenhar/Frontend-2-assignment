@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div className="p-10 gap-10 flex flex-wrap justify-start">
-      <input
+      {/* <input
         type="text"
         placeholder="Search..."
         value={query}
@@ -27,7 +27,7 @@ export default function Home() {
         <option value="All">All</option>
         <option value="Dairy">Dairy</option>
         <option value="Electronics">Electronics</option>
-      </select>
+      </select> */}
 
       {/* <OutOfStockOverlay />
 
