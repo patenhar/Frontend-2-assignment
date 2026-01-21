@@ -16,7 +16,7 @@ export default function Home() {
   // });
 
   return (
-    <div className="p-10 gap-10 flex flex-wrap justify-start">
+    <div className="p-10 gap-10 flex flex-wrap justify-start mt-14">
       {/* <input
         type="text"
         placeholder="Search..."

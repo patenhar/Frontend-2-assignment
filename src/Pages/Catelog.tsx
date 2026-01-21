@@ -1,34 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../Components/ProductCard";
 import { useFetch } from "../Hooks/useFetch";
-// import useDebounce from "../Hooks/useDebounce";
+import useDebounce from "../Hooks/useDebounce";
 
 export default function Catelog() {
   const [query, setQuery] = useState("");
-  // const debouncedValue = useDebounce(query, 1000);
+  const debouncedValue = useDebounce(query, 1000);
 
   const [category, setCategory] = useState("All");
 
-  const { data, loading, error } = useFetch("https://dummyjson.com/products");
-  console.log(data);
+  useEffect(() => {
+    setQuery("");
+  }, [category]);
+
+  let url = "https://dummyjson.com/products";
+
+  if (!debouncedValue && category != "All")
+    url = `https://dummyjson.com/products/category/${category}`;
+
+  if (debouncedValue)
+    url = `https://dummyjson.com/products/search?q=${debouncedValue}`;
+
+  const { data, loading, error } = useFetch(url);
 
   let {
     data: cat,
-    loading: lod,
+    loading: load,
     error: err,
   } = useFetch("https://dummyjson.com/products/category-list");
 
   let cate = [];
   if (cat) cate = [...cat, "All"].sort();
 
-  const filteredProducts = data?.products.filter((product) => {
-    const searched = product.title.toLowerCase().includes(query.toLowerCase());
-    const filtered = category === "All" || product.category === category;
-    return searched && filtered;
-  });
+  if (loading || load) return <p>Loading...</p>;
+  if (error || err) return <p>Something went wrong</p>;
 
   return (
-    <>
+    <div className="mt-14">
       <div className="pt-4 flex justify-center">
         <input
           type="text"
@@ -45,18 +53,23 @@ export default function Catelog() {
             ))}
         </select>
       </div>
-      <div className="p-10 gap-10 flex flex-wrap justify-start">
-        {filteredProducts &&
-          filteredProducts.map((product) => (
+      <div className="p-10 gap-10 flex flex-wrap justify-start mx-auto w-fit">
+        {data.products.length == 0 ? (
+          <p>No results found</p>
+        ) : (
+          data?.products?.map((product) => (
             <ProductCard
               id={product.id}
+              imageUrl={product.images[0]}
               title={product.title}
               description={product.description}
+              category={product.category}
               price={product.price}
               key={product.id}
             />
-          ))}
+          ))
+        )}
       </div>
-    </>
+    </div>
   );
 }

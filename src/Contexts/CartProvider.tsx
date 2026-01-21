@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { useFetch } from "../Hooks/useFetch";
 
 export const CartContext = createContext();
 
@@ -30,6 +31,29 @@ export const CartProvider = ({ children }) => {
     setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
+  const increaseQuantity = (id) => {
+    if (isAlreadyInCart(id)) {
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === id ? { id: item.id, quantity: item.quantity + 1 } : item,
+        ),
+      );
+    }
+  };
+
+  const decreaseQuantity = (id) => {
+    const item = cartItems.find((item) => item.id == id);
+    if (item.quantity > 1) {
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === id ? { id: item.id, quantity: item.quantity - 1 } : item,
+        ),
+      );
+    } else {
+      removeFromCart(id);
+    }
+  };
+
   const clearCart = () => {
     setCartItems([]);
   };
@@ -42,7 +66,7 @@ export const CartProvider = ({ children }) => {
     return cartItems
       .map((item) => {
         const { data } = useFetch(`https://dummyjson.com/products/${item.id}`);
-        return data?.product.price * item.quantity;
+        return data?.price * item.quantity;
       })
       .reduce((total, itemTotal) => total + itemTotal, 0);
   };
@@ -65,6 +89,8 @@ export const CartProvider = ({ children }) => {
         isAlreadyInCart,
         addToCart,
         removeFromCart,
+        increaseQuantity,
+        decreaseQuantity,
         clearCart,
         getTotalItems,
         getTotalPrice,
