@@ -1,24 +1,19 @@
 import React, { useState } from "react";
 import ProductCard from "../Components/ProductCard";
-import ProductForm from "../Components/ProductForm";
-import TotalProducts from "../Components/TotalProducts";
-import TotalInventoryValue from "../Components/TotalInventoryValue";
-import LowStockAlert from "../Components/LowStockAlert";
-import OutOfStockOverlay from "../Components/OutOfStockOverlay";
 
 export default function Home() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
 
-  const storage = Object.values({ ...localStorage });
-  console.log(storage);
-  const products = storage.map((item, idx) => JSON.parse(item));
+  // const storage = Object.values({ ...localStorage });
+  // console.log(storage);
+  // const products = storage.map((item, idx) => JSON.parse(item));
 
-  const filteredProducts = products.filter((product) => {
-    const searched = product.title.toLowerCase().includes(query.toLowerCase());
-    const filtered = category === "All" || product.category === category;
-    return searched && filtered;
-  });
+  // const filteredProducts = products.filter((product) => {
+  //   const searched = product.title.toLowerCase().includes(query.toLowerCase());
+  //   const filtered = category === "All" || product.category === category;
+  //   return searched && filtered;
+  // });
 
   return (
     <div className="p-10 gap-10 flex flex-wrap justify-start">
@@ -34,17 +29,15 @@ export default function Home() {
         <option value="Electronics">Electronics</option>
       </select>
 
-      <OutOfStockOverlay />
+      {/* <OutOfStockOverlay />
 
       <div className="flex w-full gap-10">
         <TotalProducts />
         <TotalInventoryValue />
         <LowStockAlert />
-      </div>
+      </div> */}
 
-      <ProductForm />
-
-      {products &&
+      {/* {products &&
         filteredProducts.map((product) => (
           <ProductCard
             id={product.id}
@@ -55,7 +48,7 @@ export default function Home() {
             quantity={product.quantity}
             key={product.id}
           />
-        ))}
+        ))} */}
     </div>
   );
 }
