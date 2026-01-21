@@ -15,7 +15,7 @@ export function useFetch(url: string, options = {}) {
       try {
         const response = await fetch(url, options);
         const result = await response.json();
-        setData(result);
+        if (result) setData(result);
       } catch (err) {
         setError(err.message);
       } finally {

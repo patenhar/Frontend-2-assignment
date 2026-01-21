@@ -12,11 +12,14 @@ export default function Catelog() {
   if (error) console.log(error);
   if (!error) console.log(data?.products);
 
-  const {
+  let {
     data: cat,
     loading: lod,
     error: err,
   } = useFetch("https://dummyjson.com/products/category-list");
+
+  let cate = [];
+  if (cat) cate = [...cat, "All"].sort();
 
   const filteredProducts = data?.products.filter((product) => {
     const searched = product.title.toLowerCase().includes(query.toLowerCase());
@@ -25,31 +28,34 @@ export default function Catelog() {
   });
 
   return (
-    <div className="p-10 gap-10 flex flex-wrap justify-start">
-      <input
-        type="text"
-        placeholder="Search..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        {cat &&
-          cat?.map((cat) => (
-            <option value={cat} key={cat}>
-              {cat}
-            </option>
+    <>
+      <div className="pt-4 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          {cat &&
+            cate?.map((cat) => (
+              <option value={cat} key={cat}>
+                {cat}
+              </option>
+            ))}
+        </select>
+      </div>
+      <div className="p-10 gap-10 flex flex-wrap justify-start">
+        {filteredProducts &&
+          filteredProducts.map((product) => (
+            <ProductCard
+              title={product.title}
+              description={product.description}
+              price={product.price}
+              key={product.id}
+            />
           ))}
-      </select>
-
-      {filteredProducts &&
-        filteredProducts.map((product) => (
-          <ProductCard
-            title={product.title}
-            description={product.description}
-            price={product.price}
-            key={product.id}
-          />
-        ))}
-    </div>
+      </div>
+    </>
   );
 }
