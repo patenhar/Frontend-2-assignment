@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import ProductCard from "../Components/ProductCard";
 import { useFetch } from "../Hooks/useFetch";
+// import useDebounce from "../Hooks/useDebounce";
 
 export default function Catelog() {
   const [query, setQuery] = useState("");
+  // const debouncedValue = useDebounce(query, 1000);
+
   const [category, setCategory] = useState("All");
 
   const { data, loading, error } = useFetch("https://dummyjson.com/products");
-
-  if (loading) console.log("loading...");
-  if (error) console.log(error);
-  if (!error) console.log(data?.products);
+  console.log(data);
 
   let {
     data: cat,
@@ -49,6 +49,7 @@ export default function Catelog() {
         {filteredProducts &&
           filteredProducts.map((product) => (
             <ProductCard
+              id={product.id}
               title={product.title}
               description={product.description}
               price={product.price}

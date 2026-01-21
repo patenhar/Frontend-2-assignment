@@ -1,8 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { useTheme } from "../Contexts/ThemeProvider";
+import { CartContext } from "../Contexts/CartProvider";
+import { useContext } from "react";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const { getTotalItems } = useContext(CartContext);
 
   return (
     <>
@@ -20,7 +23,7 @@ export default function Navbar() {
           </button>
           <div className="flex gap-2">
             <NavLink to="/my-cart" className="p-2 border-0 rounded-sm">
-              My cart
+              My cart ({getTotalItems()})
             </NavLink>
 
             <a className="p-2 bg-blue-500 text-white border-0 rounded-sm">
